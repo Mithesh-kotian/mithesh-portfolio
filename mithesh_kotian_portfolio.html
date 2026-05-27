@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mithesh Kotian — Video Editor & Mobile Videographer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#050505;--dark1:#0d0d0b;--dark2:#141412;--dark3:#1c1c19;--dark4:#252522;
+  --gold:#c8a45a;--gold2:#a07c35;--gold3:#7a5c1e;--cream:#ede8dc;--muted:#6b6860;--faint:#2a2a26;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--cream);font-family:Georgia,serif;overflow-x:hidden;min-height:100vh}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(5,5,5,0.92);border-bottom:0.5px solid var(--faint)}
+.logo{font-size:1rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;font-style:italic}
+.nav-r{display:flex;align-items:center;gap:2rem}
+.nav-r a{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;font-family:Arial,sans-serif}
+.nav-r a:hover{color:var(--gold)}
+.nav-insta{border:0.5px solid var(--gold3);padding:0.4rem 1rem;color:var(--gold) !important;}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;text-align:center;padding:6rem 2rem 4rem;background:var(--black)}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 65% 65% at 50% 50%,transparent 20%,rgba(5,5,5,0.75) 100%);pointer-events:none}
+.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(200,164,90,0.05) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+
+.strip{position:absolute;top:0;bottom:0;width:48px;overflow:hidden;opacity:0.15}
+.strip.l{left:0}.strip.r{right:0}
+.strip-inner{display:flex;flex-direction:column;animation:sc 10s linear infinite}
+.strip.r .strip-inner{animation-direction:reverse}
+@keyframes sc{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.ph{width:48px;height:34px;border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);display:flex;align-items:center;justify-content:center}
+.ph-hole{width:26px;height:18px;border:1px solid var(--gold);border-radius:2px}
+
+.hero-label{font-size:0.58rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold);opacity:0.75;margin-bottom:1.5rem;font-family:Arial,sans-serif}
+.hero-name{font-size:clamp(3.8rem,9vw,8rem);line-height:0.9;font-weight:normal;color:var(--cream);font-family:Georgia,serif}
+.hero-name em{font-style:italic;color:var(--gold);display:block}
+.hero-sub{font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:1.5rem;margin-bottom:2.5rem;font-family:Arial,sans-serif}
+.hero-dots{display:flex;gap:0.5rem;justify-content:center;margin-bottom:2rem}
+.hero-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0.4}
+.hero-dot.active{opacity:1;width:20px;border-radius:2px}
+.scroll-hint{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);opacity:0.5;font-family:Arial,sans-serif}
+.scroll-bar{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);margin:0.5rem auto 0;opacity:0.4}
+
+section{padding:5rem 2.5rem}
+.sec-ey{font-size:0.57rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0.65;margin-bottom:0.6rem;font-family:Arial,sans-serif}
+.sec-h{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:normal;font-family:Georgia,serif;color:var(--cream);line-height:1.05;margin-bottom:2rem}
+.sec-h em{font-style:italic;color:var(--gold)}
+.divl{width:50px;height:1px;background:var(--gold3);margin-bottom:2rem;opacity:0.5}
+
+.about-grid{display:grid;grid-template-columns:280px 1fr;gap:5rem;align-items:center;max-width:1050px;margin:0 auto}
+.photo-box{width:280px;height:340px;background:var(--dark3);border:0.5px solid rgba(200,164,90,0.2);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photo-box img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-init{font-size:5rem;font-style:italic;color:rgba(200,164,90,0.15);font-family:Georgia,serif}
+.photo-note{position:absolute;bottom:0;left:0;right:0;background:rgba(5,5,5,0.8);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:0.6rem;text-align:center;font-family:Arial,sans-serif}
+.cx{position:absolute;width:22px;height:22px;border-color:var(--gold);border-style:solid;opacity:0.4}
+.cx.tl{top:8px;left:8px;border-width:1px 0 0 1px}
+.cx.br{bottom:8px;right:8px;border-width:0 1px 1px 0}
+.bio{font-size:0.9rem;line-height:1.95;color:rgba(237,232,220,0.62);margin-bottom:1.2rem;font-family:Arial,sans-serif;font-weight:300}
+.tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1.2rem}
+.tag{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.35rem 0.9rem;border:0.5px solid rgba(200,164,90,0.25);color:var(--gold);opacity:0.75;font-family:Arial,sans-serif}
+
+/* TOOLS */
+.tools-sec{background:var(--dark1);border-top:0.5px solid var(--faint);border-bottom:0.5px solid var(--faint)}
+.tools-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--faint);margin-top:2rem;max-width:1000px}
+.tool-card{background:var(--dark2);padding:2.2rem 1rem 1.8rem;text-align:center;transition:background 0.3s;position:relative;overflow:hidden}
+.tool-card:hover{background:var(--dark3)}
+.logo-mark{width:58px;height:58px;border-radius:10px;margin:0 auto 0.9rem;display:flex;align-items:center;justify-content:center;position:relative;font-size:1.35rem;font-weight:700;letter-spacing:-0.03em;font-family:'Arial Black',Arial,sans-serif}
+.lm-capcut{background:#111;border:1px solid #333}
+.lm-capcut span{color:#fff;font-size:1.2rem;letter-spacing:-0.05em}
+.lm-ae{background:#1a0a2e;border:1px solid #4a1aff22}
+.lm-ae span{background:linear-gradient(135deg,#9999ff,#6666cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.3rem}
+.lm-da{background:#0a0a0a;border:1px solid #333}
+.lm-da span{color:#e8e8e8;font-size:1.15rem}
+.lm-da::before{content:'';position:absolute;inset:0;border-radius:10px;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.06),transparent 60%)}
+.lm-ps{background:#001e36;border:1px solid #001e3644}
+.lm-ps span{background:linear-gradient(135deg,#31a8ff,#1473e6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:1.3rem}
+.lm-ca{background:#00c4cc18;border:1px solid #00c4cc33}
+.lm-ca span{color:#00c4cc;font-size:1.25rem}
+.tool-name{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;font-family:Arial,sans-serif}
+.tool-lv{font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.55;font-family:Arial,sans-serif}
+.tool-bar-wrap{height:1px;background:var(--faint);margin-top:0.9rem;position:relative}
+.tool-bar-fill{height:1px;background:var(--gold);opacity:0.5;position:absolute;top:0;left:0}
+.lv-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:4px;vertical-align:middle;position:relative;top:-1px}
+.dot-expert{background:#c8a45a}.dot-inter{background:#7a8fa6}.dot-learn{background:#4a4a44}
+
+/* WORK */
+.work-sec{background:var(--dark1)}
+.vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--faint);max-width:1200px;margin:0 auto}
+.vc{background:var(--dark2);position:relative;overflow:hidden}
+.vc.wide{grid-column:span 2}
+.vc-thumb{aspect-ratio:16/9;background:var(--dark3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vc.wide .vc-thumb{aspect-ratio:16/7}
+.vc:not(.wide) .vc-thumb{aspect-ratio:9/14}
+.vc-bg-txt{position:absolute;font-size:5rem;color:var(--gold);opacity:0.04;font-style:italic;font-family:Georgia,serif}
+.play{width:52px;height:52px;border:1px solid rgba(200,164,90,0.35);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(200,164,90,0.04);transition:all 0.3s;position:relative;z-index:1}
+.vc:hover .play{background:rgba(200,164,90,0.14);border-color:var(--gold)}
+.tri{width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:15px solid var(--gold);margin-left:4px;opacity:0.7}
+.vc-info{padding:0.9rem 1.1rem;background:var(--dark1);border-top:0.5px solid var(--faint)}
+.vc-cat{font-size:0.52rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);opacity:0.6;margin-bottom:0.25rem;font-family:Arial,sans-serif}
+.vc-title{font-size:1rem;font-family:Georgia,serif;color:var(--cream);margin-bottom:0.15rem;font-style:italic}
+.vc-meta{font-size:0.58rem;color:var(--muted);font-family:Arial,sans-serif}
+.add-lbl{position:absolute;top:0.6rem;right:0.6rem;font-size:0.48rem;letter-spacing:0.15em;text-transform:uppercase;background:rgba(200,164,90,0.1);border:0.5px solid rgba(200,164,90,0.25);color:var(--gold);padding:0.25rem 0.5rem;font-family:Arial,sans-serif}
+
+/* SKILLS */
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:900px;margin:2rem auto 0}
+.sk-grp-lbl{font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);opacity:0.5;margin-bottom:1.25rem;padding-bottom:0.6rem;border-bottom:0.5px solid var(--faint);font-family:Arial,sans-serif}
+.sk-row{margin-bottom:1.3rem}
+.sk-top{display:flex;justify-content:space-between;margin-bottom:0.45rem}
+.sk-n{font-size:0.82rem;color:var(--cream);font-family:Arial,sans-serif}
+.sk-l{font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);opacity:0.55;font-family:Arial,sans-serif}
+.sk-track{height:1px;background:var(--faint)}
+.sk-fill{height:1px;background:var(--gold);opacity:0.55}
+
+/* CONTACT */
+.contact-sec{background:var(--dark2);text-align:center}
+.contact-big{font-size:clamp(2.5rem,5.5vw,4.5rem);font-family:Georgia,serif;font-weight:normal;line-height:1;margin-bottom:1rem}
+.contact-big em{font-style:italic;color:var(--gold)}
+.contact-p{font-size:0.82rem;color:var(--muted);line-height:1.9;font-family:Arial,sans-serif;max-width:500px;margin:0 auto 3rem}
+.clinks{display:flex;justify-content:center;gap:1px;background:var(--faint);max-width:580px;margin:0 auto 2.5rem}
+.cl{flex:1;background:var(--dark3);padding:1.6rem 1rem;text-align:center;text-decoration:none;transition:background 0.3s}
+.cl:hover{background:var(--dark4)}
+.cl-lbl{font-size:0.52rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;font-family:Arial,sans-serif}
+.cl-val{font-size:0.75rem;color:var(--cream);font-family:Arial,sans-serif}
+.insta-btn{display:inline-flex;align-items:center;gap:0.75rem;border:0.5px solid var(--gold3);padding:0.9rem 2.5rem;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:all 0.3s;font-family:Arial,sans-serif}
+.insta-btn:hover{background:rgba(200,164,90,0.08);border-color:var(--gold)}
+
+footer{padding:1.6rem 2.5rem;border-top:0.5px solid var(--faint);display:flex;justify-content:space-between;align-items:center;background:var(--black)}
+footer span{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);font-family:Arial,sans-serif}
+.fmark{color:var(--gold);opacity:0.45;font-style:italic;font-family:Georgia,serif;font-size:0.9rem;text-transform:none !important;letter-spacing:0 !important}
+
+@media(max-width:700px){
+  .about-grid{grid-template-columns:1fr;gap:2.5rem}
+  .photo-box{width:100%;height:260px}
+  .tools-grid{grid-template-columns:repeat(3,1fr)}
+  .vid-grid{grid-template-columns:1fr 1fr}
+  .vc.wide{grid-column:span 2}
+  .sk-grid{grid-template-columns:1fr;gap:2rem}
+  nav{padding:1rem 1.25rem}
+  .nav-r a:not(.nav-insta){display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Mithesh Kotian</div>
+  <div class="nav-r">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#contact">Contact</a>
+    <a class="nav-insta" href="https://instagram.com/mithesh.____" target="_blank">@ mithesh.____</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-vignette"></div>
+  <div class="hero-glow"></div>
+  <div class="strip l" aria-hidden="true"><div class="strip-inner">
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+  </div></div>
+  <div class="strip r" aria-hidden="true"><div class="strip-inner">
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+    <div class="ph"><div class="ph-hole"></div></div><div class="ph"><div class="ph-hole"></div></div>
+  </div></div>
+
+  <p class="hero-label">Mobile Videographer &amp; Video Editor — Mangalore</p>
+  <h1 class="hero-name">Mithesh<em>Kotian</em></h1>
+  <p class="hero-sub">Shot on mobile &nbsp;·&nbsp; Edited with purpose &nbsp;·&nbsp; Cinematic soul</p>
+  <div class="hero-dots">
+    <div class="hero-dot active"></div>
+    <div class="hero-dot"></div>
+    <div class="hero-dot"></div>
+  </div>
+  <div class="scroll-hint">Scroll to explore</div>
+  <div class="scroll-bar"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <div class="photo-box">
+        <!-- REPLACE: change src to your photo path e.g. src="mithesh.jpg" -->
+        <span class="photo-init">MK</span>
+        <div class="cx tl"></div><div class="cx br"></div>
+        <div class="photo-note">📷 Replace with your photo</div>
+      </div>
+    </div>
+    <div>
+      <p class="sec-ey">About the creator</p>
+      <h2 class="sec-h">Behind the<br><em>Lens &amp; Edit</em></h2>
+      <div class="divl"></div>
+      <p class="bio">I'm Mithesh — a mobile videographer and video editor from Mangalore. Every frame I shoot is intentional, every cut I make is felt. I believe great storytelling doesn't need expensive gear — it needs a sharp eye and a creative mind.</p>
+      <p class="bio">From golden hour street shots to cinematic short edits, I handle the full journey — from pressing record to the final export.</p>
+      <div class="tags">
+        <span class="tag">Mobile Videography</span><span class="tag">Video Editing</span>
+        <span class="tag">Colour Grading</span><span class="tag">Reels</span>
+        <span class="tag">Motion Graphics</span><span class="tag">Scriptwriting</span>
+        <span class="tag">Graphic Design</span><span class="tag">Portrait Art</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-sec">
+  <p class="sec-ey">Software</p>
+  <h2 class="sec-h" style="font-size:1.9rem">My <em>Toolkit</em></h2>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="logo-mark lm-capcut"><span>CC</span></div>
+      <div class="tool-name">CapCut</div>
+      <div class="tool-lv"><span class="lv-dot dot-expert"></span>Expert</div>
+      <div class="tool-bar-wrap"><div class="tool-bar-fill" style="width:95%"></div></div>
+    </div>
+    <div class="tool-card">
+      <div class="logo-mark lm-ae"><span>Ae</span></div>
+      <div class="tool-name">After Effects</div>
+      <div class="tool-lv"><span class="lv-dot dot-learn"></span>Learning</div>
+      <div class="tool-bar-wrap"><div class="tool-bar-fill" style="width:38%"></div></div>
+    </div>
+    <div class="tool-card">
+      <div class="logo-mark lm-da"><span>Dr</span></div>
+      <div class="tool-name">DaVinci Resolve</div>
+      <div class="tool-lv"><span class="lv-dot dot-learn"></span>Learning</div>
+      <div class="tool-bar-wrap"><div class="tool-bar-fill" style="width:32%"></div></div>
+    </div>
+    <div class="tool-card">
+      <div class="logo-mark lm-ps"><span>Ps</span></div>
+      <div class="tool-name">Photoshop</div>
+      <div class="tool-lv"><span class="lv-dot dot-inter"></span>Intermediate</div>
+      <div class="tool-bar-wrap"><div class="tool-bar-fill" style="width:62%"></div></div>
+    </div>
+    <div class="tool-card">
+      <div class="logo-mark lm-ca"><span>Ca</span></div>
+      <div class="tool-name">Canva</div>
+      <div class="tool-lv"><span class="lv-dot dot-inter"></span>Good</div>
+      <div class="tool-bar-wrap"><div class="tool-bar-fill" style="width:80%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work-sec" id="work">
+  <p class="sec-ey">Portfolio</p>
+  <h2 class="sec-h" style="font-size:2rem">The <em>Reel</em></h2>
+  <div class="vid-grid">
+    <!-- TO ADD VIDEO: replace <div class="vc-thumb">...</div> with:
+         <video class="vc-thumb" src="your-video.mp4" controls poster="thumbnail.jpg"></video> -->
+    <div class="vc wide">
+      <div class="add-lbl">Replace with your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">▶</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Featured · Mobile Videography</p><p class="vc-title">Mangalore Golden Hour Reel</p><p class="vc-meta">Shot &amp; Edited by Mithesh · CapCut</p></div>
+    </div>
+    <div class="vc">
+      <div class="add-lbl">Your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">◈</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Cinematic Edit</p><p class="vc-title">Cinematic Short</p><p class="vc-meta">CapCut · Colour Graded</p></div>
+    </div>
+    <div class="vc">
+      <div class="add-lbl">Your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">✦</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Instagram Reel</p><p class="vc-title">Transition Reel</p><p class="vc-meta">CapCut · Motion Sync</p></div>
+    </div>
+    <div class="vc">
+      <div class="add-lbl">Your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">⬡</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Mobile Shot</p><p class="vc-title">Nature Timelapse</p><p class="vc-meta">Shot on Mobile</p></div>
+    </div>
+    <div class="vc">
+      <div class="add-lbl">Your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">◎</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Brand Content</p><p class="vc-title">Product Promo</p><p class="vc-meta">CapCut · Photoshop</p></div>
+    </div>
+    <div class="vc">
+      <div class="add-lbl">Your video</div>
+      <div class="vc-thumb"><div class="vc-bg-txt">▲</div><div class="play"><div class="tri"></div></div></div>
+      <div class="vc-info"><p class="vc-cat">Motion Graphics</p><p class="vc-title">Title Sequence</p><p class="vc-meta">After Effects</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section>
+  <p class="sec-ey">What I bring</p>
+  <h2 class="sec-h" style="font-size:1.9rem">Full <em>Skillset</em></h2>
+  <div class="sk-grid">
+    <div>
+      <p class="sk-grp-lbl">Video &amp; Editing</p>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">CapCut</span><span class="sk-l">Expert</span></div><div class="sk-track"><div class="sk-fill" style="width:95%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">After Effects</span><span class="sk-l">Learning</span></div><div class="sk-track"><div class="sk-fill" style="width:38%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">DaVinci Resolve</span><span class="sk-l">Learning</span></div><div class="sk-track"><div class="sk-fill" style="width:32%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Colour Grading</span><span class="sk-l">Good</span></div><div class="sk-track"><div class="sk-fill" style="width:72%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Transitions &amp; Sync</span><span class="sk-l">Advanced</span></div><div class="sk-track"><div class="sk-fill" style="width:85%"></div></div></div>
+    </div>
+    <div>
+      <p class="sk-grp-lbl">Design &amp; Creative</p>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Adobe Photoshop</span><span class="sk-l">Intermediate</span></div><div class="sk-track"><div class="sk-fill" style="width:62%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Canva</span><span class="sk-l">Good</span></div><div class="sk-track"><div class="sk-fill" style="width:80%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Scriptwriting</span><span class="sk-l">Good</span></div><div class="sk-track"><div class="sk-fill" style="width:75%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Mobile Videography</span><span class="sk-l">Expert</span></div><div class="sk-track"><div class="sk-fill" style="width:92%"></div></div></div>
+      <div class="sk-row"><div class="sk-top"><span class="sk-n">Portrait &amp; Illustration</span><span class="sk-l">Advanced</span></div><div class="sk-track"><div class="sk-fill" style="width:88%"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-sec" id="contact">
+  <p class="sec-ey" style="margin-bottom:1rem">Let's work together</p>
+  <h2 class="contact-big">Got a project<br><em>in mind?</em></h2>
+  <p class="contact-p">Open to freelance video editing, mobile videography gigs, and creative collaborations — based in Mangalore, Karnataka.</p>
+  <div class="clinks">
+    <a class="cl" href="mailto:mitheshkotian116@gmail.com"><p class="cl-lbl">Email</p><p class="cl-val">mitheshkotian116@gmail.com</p></a>
+    <a class="cl" href="tel:+919035467157"><p class="cl-lbl">Phone</p><p class="cl-val">+91 90354 67157</p></a>
+  </div>
+  <a class="insta-btn" href="https://instagram.com/mithesh.____" target="_blank">Follow on Instagram &nbsp; @mithesh.____</a>
+</section>
+
+<footer>
+  <span>© 2026 Mithesh Kotian</span>
+  <span class="fmark">Frame by Frame</span>
+  <span>Mangalore, Karnataka</span>
+</footer>
+
+</body>
+</html>
